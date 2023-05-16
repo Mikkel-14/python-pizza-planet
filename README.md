@@ -52,15 +52,13 @@ _For windows users:_
 - Install all necessary dependencies:
 
 ```bash
-pip3 install -r requirements.txt
+make setup-dev-environment
 ```
 
 - Start the database (Only needed for the first run):
 
 ```bash
-python3 manage.py db init
-python3 manage.py db migrate
-python3 manage.py db upgrade
+make setup-db
 ```
 
 - If you want to use the hot reload feature set FLASK_ENV before running the project:
@@ -82,7 +80,11 @@ set FLASK_ENV=development
 ```bash
 python3 manage.py run
 ```
-
+- Or use (linux/MacOS users):
+```bash
+make start
+```
+To run the project with hot reload
 ## Running the frontend
 
 - Clone git UI submodule
@@ -110,5 +112,10 @@ ext install ritwickdey.LiveServer
 - Run the test command
 
 ```bash
-python3 manage.py test
+make test
+```
+- To generate the coverage report, run the command:
+
+```bash
+make compute-coverage
 ```
