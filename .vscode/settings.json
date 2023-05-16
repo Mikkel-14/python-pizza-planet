@@ -1,3 +1,7 @@
 {
-    "liveServer.settings.root": "/ui"
+    "liveServer.settings.root": "/ui",
+    "python.testing.pytestArgs": [
+        "app"
+    ],
+    "python.testing.pytestEnabled": true
 }
