@@ -41,7 +41,6 @@ def test_create(app, ingredients, size, client_data):
         pytest.assume(not ingredients_in_detail.difference(ingredient_ids))
 
 
-@pytest.mark.skip
 def test_calculate_order_price(app, ingredients, size, client_data):
     created_size, created_ingredients = __create_sizes_and_ingredients(ingredients, [size])
     order = __order(created_ingredients, created_size, client_data)
