@@ -1,0 +1,18 @@
+name: CI Pipeline
+on:
+  pull_request:
+    branches: 
+      - main
+jobs:
+  run-tests-and-compute-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests and compute coverage
+        run:
+          pytest --cov=./app ./app/test
