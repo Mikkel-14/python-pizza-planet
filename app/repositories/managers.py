@@ -2,8 +2,8 @@ from typing import Any, List, Optional, Sequence
 
 from sqlalchemy.sql import text, column
 
-from .models import Ingredient, Order, OrderDetail, Size, db
-from .serializers import IngredientSerializer, OrderSerializer, SizeSerializer, ma
+from .models import Ingredient, Order, OrderDetail, Size, Beverage, db
+from .serializers import IngredientSerializer, OrderSerializer, SizeSerializer, BeverageSerializer, ma
 
 
 class BaseManager:
@@ -80,3 +80,8 @@ class IndexManager(BaseManager):
     @classmethod
     def test_connection(cls):
         cls.session.query(column("1")).from_statement(text("SELECT 1")).all()
+
+
+class BeverageManager(BaseManager):
+    model = Beverage
+    serializer = BeverageSerializer
