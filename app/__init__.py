@@ -41,3 +41,18 @@ def configure_app(config_class):
 
 
 flask_app = configure_app("app.settings.Config")
+
+
+@flask_app.cli.command("seed_db")
+def db_seed():
+    from app.seeds.ingredient import IngredientSeeder
+    from app.seeds.size import SizeSeeder
+    from app.seeds.beverage import BeverageSeeder
+    from app.seeds.order import OrderSeeder
+    from .plugins import db
+
+    ingredients = IngredientSeeder(db).run()
+    sizes = SizeSeeder(db).run()
+    beverages = BeverageSeeder(db).run()
+    db.session.commit()
+    OrderSeeder().run(ingredients, beverages, sizes)

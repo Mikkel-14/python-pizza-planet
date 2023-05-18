@@ -1,2 +1,5 @@
 [run]
-omit = app/test/*
+omit = 
+    app/test/*
+    app/seeds/*
+    */__init__.py

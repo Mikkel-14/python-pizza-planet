@@ -10,6 +10,10 @@ setup-db:
 	python3 manage.py db migrate
 	python3 manage.py db upgrade
 
+.PHONY: seed-db
+seed-db:
+	flask seed_db
+
 .PHONY: start
 start: export FLASK_ENV=development
 start:
