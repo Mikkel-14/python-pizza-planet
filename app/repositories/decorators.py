@@ -18,16 +18,14 @@ class OrderDecorator(BaseManager):
     def update(cls):
         raise NotImplementedError(f"Method not suported for {cls.__name__}")
 
-    @classmethod
-    def set_manager(cls, manager: BaseManager):
-        cls.manager = manager
-
 
 class IngredientsOrderDecorator(OrderDecorator):
     @classmethod
     def create(cls, entry: dict):
-        created_order = cls.manager.create(entry["order_data"])
-        ingredients = entry["ingredients"]
+        current_entry = entry.copy()
+        ingredients = current_entry.pop("ingredients")
+        created_order = cls.manager.create(current_entry)
+
         cls.session.add_all(
             (
                 OrderDetail(

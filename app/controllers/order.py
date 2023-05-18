@@ -7,7 +7,7 @@ from .base import BaseController
 
 
 class OrderController(BaseController):
-    manager = IngredientsOrderDecorator
+    manager = OrderManager
     __required_info = ("client_name", "client_dni", "client_address", "client_phone", "size_id")
 
     @staticmethod
@@ -22,6 +22,7 @@ class OrderController(BaseController):
     @classmethod
     def create(cls, order: dict):
         current_order = order.copy()
+        cls._get_decorated_order_manager()
         if not check_required_keys(cls.__required_info, current_order):
             return None, "Invalid order payload"
 
@@ -34,7 +35,6 @@ class OrderController(BaseController):
                 "Invalid size for Order",
             )
 
-        cls.manager.set_manager(OrderManager)
         ingredient_ids = current_order.pop("ingredients", [])
         beverage_ids = current_order.pop("beverages", [])
         try:
@@ -43,7 +43,13 @@ class OrderController(BaseController):
             ingredients_and_beverages = {"ingredients": ingredients, "beverages": beverages}
             price = cls.calculate_order_price(size.get("price"), ingredients_and_beverages)
             order_with_price = {**current_order, "total_price": price}
-            order_with_ingredients_and_beverages = {"order_data": order_with_price, **ingredients_and_beverages}
+            order_with_ingredients_and_beverages = {**order_with_price, **ingredients_and_beverages}
             return cls.manager.create(order_with_ingredients_and_beverages), None
         except (SQLAlchemyError, RuntimeError) as ex:
             return None, str(ex)
+
+    @classmethod
+    def _get_decorated_order_manager(cls):
+        decorated_manager = IngredientsOrderDecorator
+        decorated_manager.manager = OrderManager
+        cls.manager = decorated_manager

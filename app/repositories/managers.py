@@ -57,13 +57,6 @@ class OrderManager(BaseManager):
     serializer = OrderSerializer
 
     @classmethod
-    def create(cls, order_data: dict):
-        new_order = cls.model(**order_data)
-        cls.session.add(new_order)
-        cls.session.commit()
-        return cls.serializer().dump(new_order)
-
-    @classmethod
     def update(cls):
         raise NotImplementedError(f"Method not suported for {cls.__name__}")
 
