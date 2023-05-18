@@ -1,38 +1,31 @@
 from app.common.http_methods import GET, POST, PUT
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 
 from ..controllers import BeverageController
+from .service_template import CreateService, UpdateService, GetByIdService, GetAllService
 
 beverage = Blueprint("beverage", __name__)
 
 
 @beverage.route("/", methods=POST)
 def create_beverage():
-    beverage, error = BeverageController.create(request.json)
-    response = beverage if not error else {"error": error}
-    status_code = 200 if not error else 400
-    return jsonify(response), status_code
+    service = CreateService(BeverageController)
+    return service.run(request.json)
 
 
 @beverage.route("/", methods=PUT)
 def update_beverage():
-    beverage, error = BeverageController.update(request.json)
-    response = beverage if not error else {"error": error}
-    status_code = 200 if not error else 400
-    return jsonify(response), status_code
+    service = UpdateService(BeverageController)
+    return service.run(request.json)
 
 
 @beverage.route("/id/<_id>", methods=GET)
 def get_beverage_by_id(_id: int):
-    beverage, error = BeverageController.get_by_id(_id)
-    response = beverage if not error else {"error": error}
-    status_code = 200 if beverage else 404 if not error else 400
-    return jsonify(response), status_code
+    service = GetByIdService(BeverageController)
+    return service.run(_id)
 
 
 @beverage.route("/", methods=GET)
 def get_beverages():
-    beverage, error = BeverageController.get_all()
-    response = beverage if not error else {"error": error}
-    status_code = 200 if beverage else 404 if not error else 400
-    return jsonify(response), status_code
+    service = GetAllService(BeverageController)
+    return service.run()
