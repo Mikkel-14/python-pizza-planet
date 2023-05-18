@@ -2,7 +2,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from ..common.utils import check_required_keys
 from ..repositories.managers import IngredientManager, OrderManager, SizeManager, BeverageManager
-from ..repositories.decorators import IngredientsOrderDecorator
+from ..repositories.decorators import IngredientsOrderDecorator, BeveragesOrderDecorator
 from .base import BaseController
 
 
@@ -50,6 +50,9 @@ class OrderController(BaseController):
 
     @classmethod
     def _get_decorated_order_manager(cls):
-        decorated_manager = IngredientsOrderDecorator
-        decorated_manager.manager = OrderManager
-        cls.manager = decorated_manager
+        beverage_decorated_manager = BeveragesOrderDecorator
+        ingredient_decorated_manager = IngredientsOrderDecorator
+
+        ingredient_decorated_manager.manager = OrderManager
+        beverage_decorated_manager.manager = ingredient_decorated_manager
+        cls.manager = beverage_decorated_manager
