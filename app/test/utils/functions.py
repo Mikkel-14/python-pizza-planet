@@ -2,11 +2,17 @@ import random
 import string
 from typing import Any, Union
 
+from faker import Faker
+
 
 def get_random_string() -> str:
     letters = list(string.ascii_lowercase)
     random.shuffle(letters)
     return "".join(letters[:10])
+
+
+def get_random_name():
+    return f"{Faker().first_name()} {Faker().last_name()}"
 
 
 def get_random_choice(choices: Union[tuple, list]) -> Any:

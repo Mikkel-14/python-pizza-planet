@@ -20,7 +20,7 @@ class ReportController(BaseController):
             customer_names = cls._get_top_customers()
             response = cls._construct_response(ingredient, month_and_revenue, customer_names)
             return response, None
-        except (SQLAlchemyError, RuntimeError) as ex:
+        except (SQLAlchemyError, RuntimeError, TypeError) as ex:
             return None, str(ex)
 
     @classmethod
