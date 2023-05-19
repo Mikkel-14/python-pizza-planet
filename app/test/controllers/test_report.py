@@ -79,3 +79,31 @@ def test_get_month_with_more_revenue(app, ingredients, size, clients_data, bever
 
     actual_month = returned_report["month"]
     pytest.assume(expected_month == actual_month)
+
+
+def test_get_top_customers(app, ingredients, size, clients_data, beverages, create_specific_orders):
+    created_size, created_ingredients, created_beverages = __create_sizes_beverages_and_ingredients(
+        ingredients, [size], beverages
+    )
+    ingredient_ids, beverage_ids, size_id = __get_item_ids(created_ingredients, created_beverages, created_size)
+    expected_clients = set(client.get("client_name") for client in clients_data[:3])
+    for i in range(len(expected_clients)):
+        create_specific_orders(
+            clients=[clients_data[i]],
+            ingredients=ingredient_ids[:1],
+            beverages=beverage_ids,
+            sizes=[size_id],
+            orders_len=5,
+        )
+    create_specific_orders(
+        clients=clients_data,
+        ingredients=ingredient_ids[:1],
+        beverages=beverage_ids,
+        sizes=[size_id],
+        orders_len=5,
+    )
+
+    returned_report, _ = ReportController.get_all()
+
+    actual_clients = set(returned_report["clients"])
+    pytest.assume(not expected_clients.difference(actual_clients))
