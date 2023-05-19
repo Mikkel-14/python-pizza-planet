@@ -17,6 +17,10 @@ def get_random_price(lower_bound: float, upper_bound: float) -> float:
     return round(random.uniform(lower_bound, upper_bound), 2)
 
 
+def get_random_day(start_day: int = 1, end_day: int = 28) -> int:
+    return round(random.uniform(start_day, end_day))
+
+
 def shuffle_list(choices: list) -> list:
     choice_copy = choices.copy()
     random.shuffle(choice_copy)

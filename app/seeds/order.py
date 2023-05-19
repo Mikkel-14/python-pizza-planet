@@ -38,8 +38,8 @@ class OrderGenerator:
         for _ in range(100):
             order = {
                 **shuffle_list(client_data)[0],
-                "ingredients": shuffle_list(ingredients)[:10],
-                "beverages": shuffle_list(beverages)[:10],
+                "ingredients": shuffle_list(ingredients)[:5],
+                "beverages": shuffle_list(beverages)[:5],
                 "size_id": shuffle_list(sizes)[0],
                 "date": Faker().date_time_between(start_date="-11M", end_date="-1M").isoformat(),
             }
