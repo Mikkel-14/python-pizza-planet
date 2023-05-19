@@ -84,6 +84,11 @@ python3 manage.py run
 ```bash
 make start
 ```
+
+> To **seed the database**, run:
+> ```bash
+> make seed-db
+> ```
 To run the project with hot reload
 ## Running the frontend
 

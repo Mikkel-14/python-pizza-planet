@@ -2,11 +2,17 @@ import random
 import string
 from typing import Any, Union
 
+from faker import Faker
+
 
 def get_random_string() -> str:
     letters = list(string.ascii_lowercase)
     random.shuffle(letters)
     return "".join(letters[:10])
+
+
+def get_random_name():
+    return f"{Faker().first_name()} {Faker().last_name()}"
 
 
 def get_random_choice(choices: Union[tuple, list]) -> Any:
@@ -15,6 +21,10 @@ def get_random_choice(choices: Union[tuple, list]) -> Any:
 
 def get_random_price(lower_bound: float, upper_bound: float) -> float:
     return round(random.uniform(lower_bound, upper_bound), 2)
+
+
+def get_random_day(start_day: int = 1, end_day: int = 28) -> int:
+    return round(random.uniform(start_day, end_day))
 
 
 def shuffle_list(choices: list) -> list:

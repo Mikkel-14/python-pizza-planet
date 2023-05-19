@@ -1,8 +1,8 @@
 from typing import Any, Optional, Sequence
 
-from sqlalchemy.sql import text, column
+from sqlalchemy.sql import text, column, func
 
-from .models import Ingredient, Order, Size, Beverage, db
+from .models import Ingredient, Order, Size, Beverage, db, OrderDetail
 from .serializers import IngredientSerializer, OrderSerializer, SizeSerializer, BeverageSerializer, ma
 
 
@@ -60,6 +60,28 @@ class OrderManager(BaseManager):
     def update(cls):
         raise NotImplementedError(f"Method not suported for {cls.__name__}")
 
+    @classmethod
+    def query_month_with_most_revenue(cls):
+        query = (
+            cls.session.query(
+                func.strftime("%m", cls.model.date).label("month"), func.sum(cls.model.total_price).label("revenue")
+            )
+            .group_by(func.strftime("%m", cls.model.date))
+            .order_by(func.sum(cls.model.total_price).desc())
+        )
+
+        return query.first()
+
+    @classmethod
+    def query_top_customers(cls, limit: int):
+        query = (
+            cls.session.query(cls.model.client_name)
+            .group_by(cls.model.client_dni)
+            .order_by(func.count().desc())
+            .limit(limit)
+        )
+        return query.all()
+
 
 class IndexManager(BaseManager):
     @classmethod
@@ -74,3 +96,14 @@ class BeverageManager(BaseManager):
     @classmethod
     def get_by_id_list(cls, ids: Sequence):
         return cls.session.query(cls.model).filter(cls.model._id.in_(set(ids))).all() or []
+
+
+class OrderDetailManager(BaseManager):
+    model = OrderDetail
+
+    @classmethod
+    def query_most_requested_ingredient(cls):
+        query = (
+            cls.session.query(cls.model.ingredient_id).group_by(cls.model.ingredient_id).order_by(func.count().desc())
+        )
+        return query.first()

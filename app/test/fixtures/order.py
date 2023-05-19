@@ -1,13 +1,13 @@
 import pytest
 
-from ..utils.functions import shuffle_list, get_random_sequence, get_random_string
+from ..utils.functions import shuffle_list, get_random_sequence, get_random_string, get_random_name
 
 
 def client_data_mock() -> dict:
     return {
         "client_address": get_random_string(),
         "client_dni": get_random_sequence(),
-        "client_name": get_random_string(),
+        "client_name": get_random_name(),
         "client_phone": get_random_sequence(),
     }
 
@@ -20,6 +20,11 @@ def order_uri():
 @pytest.fixture
 def client_data():
     return client_data_mock()
+
+
+@pytest.fixture
+def clients_data():
+    return [client_data_mock() for _ in range(5)]
 
 
 @pytest.fixture
