@@ -60,10 +60,10 @@ def test_get_month_with_more_revenue(app, ingredients, size, clients_data, bever
     expected_month = 3
     create_specific_orders(
         clients=clients_data,
-        ingredients=ingredient_ids[:2],
+        ingredients=ingredient_ids[:1],
         beverages=beverage_ids,
         sizes=[size_id],
-        orders_len=3,
+        orders_len=7,
         month=expected_month,
     )
     create_specific_orders(

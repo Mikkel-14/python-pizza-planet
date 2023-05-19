@@ -60,6 +60,18 @@ class OrderManager(BaseManager):
     def update(cls):
         raise NotImplementedError(f"Method not suported for {cls.__name__}")
 
+    @classmethod
+    def query_month_with_most_revenue(cls):
+        query = (
+            cls.session.query(
+                func.strftime("%m", cls.model.date).label("month"), func.sum(cls.model.total_price).label("revenue")
+            )
+            .group_by(func.strftime("%m", cls.model.date))
+            .order_by(func.sum(cls.model.total_price).desc())
+        )
+
+        return query.first()
+
 
 class IndexManager(BaseManager):
     @classmethod
