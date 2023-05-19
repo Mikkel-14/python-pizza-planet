@@ -72,6 +72,16 @@ class OrderManager(BaseManager):
 
         return query.first()
 
+    @classmethod
+    def query_top_customers(cls, limit: int):
+        query = (
+            cls.session.query(cls.model.client_name)
+            .group_by(cls.model.client_dni)
+            .order_by(func.count().desc())
+            .limit(limit)
+        )
+        return query.all()
+
 
 class IndexManager(BaseManager):
     @classmethod
