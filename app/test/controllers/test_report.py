@@ -25,7 +25,7 @@ def __create_sizes_beverages_and_ingredients(ingredients: list, sizes: list, bev
     return created_sizes if len(created_sizes) > 1 else created_sizes.pop(), created_ingredients, created_beverages
 
 
-def test_calculate_most_requested_ingredient(app, ingredients, size, clients_data, beverages, create_specific_orders):
+def test_get_most_requested_ingredient(app, ingredients, size, clients_data, beverages, create_specific_orders):
     created_size, created_ingredients, created_beverages = __create_sizes_beverages_and_ingredients(
         ingredients, [size], beverages
     )
@@ -50,3 +50,32 @@ def test_calculate_most_requested_ingredient(app, ingredients, size, clients_dat
 
     actual_ingredient = returned_report["ingredient"]
     pytest.assume(expected_ingredient.get("_id") == actual_ingredient.get("_id"))
+
+
+def test_get_month_with_more_revenue(app, ingredients, size, clients_data, beverages, create_specific_orders):
+    created_size, created_ingredients, created_beverages = __create_sizes_beverages_and_ingredients(
+        ingredients, [size], beverages
+    )
+    ingredient_ids, beverage_ids, size_id = __get_item_ids(created_ingredients, created_beverages, created_size)
+    expected_month = 3
+    create_specific_orders(
+        clients=clients_data,
+        ingredients=ingredient_ids[:2],
+        beverages=beverage_ids,
+        sizes=[size_id],
+        orders_len=3,
+        month=expected_month,
+    )
+    create_specific_orders(
+        clients=clients_data,
+        ingredients=ingredient_ids[:1],
+        beverages=beverage_ids,
+        sizes=[size_id],
+        orders_len=2,
+        month=2,
+    )
+
+    returned_report, _ = ReportController.get_all()
+
+    actual_month = returned_report["month"]
+    pytest.assume(expected_month == actual_month)
