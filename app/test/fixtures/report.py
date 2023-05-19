@@ -5,6 +5,11 @@ from app.test.utils.functions import shuffle_list, get_random_day
 
 
 @pytest.fixture
+def report_uri():
+    return "/report/"
+
+
+@pytest.fixture
 def create_specific_orders(client, order_uri):
     def __create_orders_factory(**kwargs):
         clients = kwargs.get("clients", [])
